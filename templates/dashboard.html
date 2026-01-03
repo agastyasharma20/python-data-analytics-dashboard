@@ -1,0 +1,25 @@
+<h2>Dashboard</h2>
+
+{% if summary %}
+
+<p><b>Average Score:</b> {{ summary.average_score }}</p>
+
+<div id="chart"></div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    var data = [{
+        x: {{ summary.categories | safe }},
+        y: {{ summary.counts | safe }},
+        type: 'bar'
+    }];
+
+    Plotly.newPlot('chart', data);
+</script>
+
+{% else %}
+<p>No data available</p>
+{% endif %}
+
+<br>
+<a href="/">Add more data</a>
