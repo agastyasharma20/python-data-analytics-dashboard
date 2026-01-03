@@ -1,8 +1,16 @@
-<h2>Data Entry</h2>
-<form method="post">
-    <input name="name" placeholder="Name" required><br><br>
-    <input name="age" type="number" placeholder="Age" required><br><br>
-    <input name="category" placeholder="Category" required><br><br>
-    <input name="score" type="number" placeholder="Score" required><br><br>
-    <button type="submit">Submit</button>
-</form>
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>Enter Data</h2>
+
+    <form method="post">
+        <input name="name" placeholder="Name" required>
+        <input name="age" type="number" placeholder="Age" required>
+        <input name="category" placeholder="Category" required>
+        <input name="score" type="number" placeholder="Score" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock %}

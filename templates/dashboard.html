@@ -1,25 +1,63 @@
-<h2>Dashboard</h2>
+{% extends "base.html" %}
+{% block content %}
 
-{% if summary %}
+<div class="card">
+    <h2>Dashboard Overview</h2>
 
-<p><b>Average Score:</b> {{ summary.average_score }}</p>
+    <!-- Filter -->
+    <form method="get">
+        <input
+            name="category"
+            placeholder="Filter by category"
+            value="{{ selected_category or '' }}"
+        >
+        <button type="submit">Apply Filter</button>
+    </form>
 
-<div id="chart"></div>
+    <br>
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-    var data = [{
-        x: {{ summary.categories | safe }},
-        y: {{ summary.counts | safe }},
-        type: 'bar'
-    }];
+    {% if summary %}
+        <div class="stats">
+            <b>Average Score:</b> {{ summary.average_score }}
+        </div>
 
-    Plotly.newPlot('chart', data);
-</script>
+        <div id="barChart"></div>
+        <div id="pieChart"></div>
+        <div id="trendChart"></div>
 
-{% else %}
-<p>No data available</p>
-{% endif %}
+        <script>
+            const categories = {{ summary.categories | tojson }};
+            const counts = {{ summary.counts | tojson }};
+            const trendX = {{ summary.trend_x | tojson }};
+            const trendY = {{ summary.trend_y | tojson }};
 
-<br>
-<a href="/">Add more data</a>
+            Plotly.newPlot('barChart', [{
+                x: categories,
+                y: counts,
+                type: 'bar'
+            }], { title: 'Category Distribution' });
+
+            Plotly.newPlot('pieChart', [{
+                labels: categories,
+                values: counts,
+                type: 'pie'
+            }], { title: 'Category Share (%)' });
+
+            Plotly.newPlot('trendChart', [{
+                x: trendX,
+                y: trendY,
+                mode: 'lines+markers',
+                type: 'scatter'
+            }], { title: 'Score Trend Over Time' });
+        </script>
+
+    {% else %}
+        <p>No data available for this filter.</p>
+    {% endif %}
+<a href="/export{% if selected_category %}?category={{ selected_category }}{% endif %}"
+   class="link">⬇ Export CSV</a>
+
+    <a href="/" class="link">➕ Add More Data</a>
+</div>
+
+{% endblock %}

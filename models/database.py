@@ -1,9 +1,10 @@
 import sqlite3
+from config import Config
 
-DB_NAME = "data.db"
 
 def get_connection():
-    return sqlite3.connect(DB_NAME)
+    return sqlite3.connect(Config.DATABASE_NAME)
+
 
 def create_table():
     conn = get_connection()
